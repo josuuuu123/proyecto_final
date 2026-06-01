@@ -45,6 +45,18 @@ export const vehicleRepository = {
 
 // --- Fine Repository ---
 export const fineRepository = {
+  async create(fineData) {
+    await delay(1000);
+    const newFine = {
+      ...fineData,
+      id: `MUL-${String(_fines.length + 1).padStart(3, '0')}`,
+      fecha: fineData.fecha || new Date().toISOString().split('T')[0],
+      estado: fineData.estado || 'pendiente',
+    };
+    _fines.push(newFine);
+    return newFine;
+  },
+
   async findByVehiclePlaca(placa) {
     await delay(500);
     return _fines.filter(f => f.vehiculoPlaca === placa);

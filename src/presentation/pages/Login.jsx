@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Login.css';
 
@@ -66,7 +66,7 @@ export default function Login() {
         </form>
 
         <div className="login-links">
-          <a href="#" className="login-link">¿Olvidó su contraseña?</a>
+          <Link to="/recuperar-contrasena" className="login-link">¿Olvidó su contraseña?</Link>
         </div>
 
         <div className="login-guest-box">

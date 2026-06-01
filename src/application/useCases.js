@@ -144,3 +144,18 @@ export async function getFineDetail(fineId) {
 
   return { fine, vehicle, owner, payments, appeals };
 }
+
+// --- Emitir nueva multa (Policía) ---
+export async function issueFine(fineData) {
+  // Verificar si el vehículo existe
+  const vehicle = await vehicleRepository.findByPlaca(fineData.vehiculoPlaca);
+  if (!vehicle) {
+    throw new Error('Vehículo no encontrado. Verifique la placa.');
+  }
+
+  return await fineRepository.create({
+    ...fineData,
+    monto: Number(fineData.monto)
+  });
+}
+

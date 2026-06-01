@@ -6,7 +6,8 @@
 export const ROLES = {
   GUEST: 'GUEST',
   ADMIN: 'ADMIN',
-  CLIENT: 'CLIENT'
+  CLIENT: 'CLIENT',
+  POLICE: 'POLICE'
 };
 
 export class User {

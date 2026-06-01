@@ -25,6 +25,16 @@ export async function login(username, password) {
     });
   }
 
+  // Simulación Policía
+  if (username.toLowerCase() === 'policia' || username.toLowerCase() === 'police') {
+    return new User({
+      id: 'P001',
+      username: username.toLowerCase(),
+      nombre: 'Oficial de Policía',
+      rol: ROLES.POLICE
+    });
+  }
+
   // Simulación Cliente: primero busca en datos mock, si no existe igual lo deja entrar
   const owner = owners.find(o => o.cedula === username);
   

@@ -7,6 +7,9 @@ import Multas from './presentation/pages/Multas';
 import Pagos from './presentation/pages/Pagos';
 import Apelaciones from './presentation/pages/Apelaciones';
 import Login from './presentation/pages/Login';
+import RecuperarContrasena from './presentation/pages/RecuperarContrasena';
+import PoliceDashboard from './presentation/pages/PoliceDashboard';
+import EmitirMulta from './presentation/pages/EmitirMulta';
 
 // Componente para proteger rutas según el rol
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -17,8 +20,9 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   }
 
   if (allowedRoles && !allowedRoles.includes(user.rol)) {
-    // Si el usuario no tiene permiso, lo enviamos al inicio por defecto (que podría ser /busqueda para GUEST)
-    return <Navigate to={user.rol === 'GUEST' ? '/busqueda' : '/'} replace />;
+    // Si el usuario no tiene permiso, lo enviamos al inicio por defecto (que podría ser /busqueda para GUEST o /policia para POLICE)
+    const fallbackRoute = user.rol === 'GUEST' ? '/busqueda' : (user.rol === 'POLICE' ? '/policia' : '/');
+    return <Navigate to={fallbackRoute} replace />;
   }
 
   return children;
@@ -30,7 +34,8 @@ function AppRoutes() {
 
   return (
     <Routes>
-      <Route path="/login" element={user ? <Navigate to={user.rol === 'GUEST' ? '/busqueda' : '/'} replace /> : <Login />} />
+      <Route path="/login" element={user ? <Navigate to={user.rol === 'GUEST' ? '/busqueda' : (user.rol === 'POLICE' ? '/policia' : '/')} replace /> : <Login />} />
+      <Route path="/recuperar-contrasena" element={user ? <Navigate to={user.rol === 'GUEST' ? '/busqueda' : (user.rol === 'POLICE' ? '/policia' : '/')} replace /> : <RecuperarContrasena />} />
       
       {/* Rutas protegidas dentro del Layout */}
       <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
@@ -80,6 +85,26 @@ function AppRoutes() {
           element={
             <ProtectedRoute allowedRoles={['ADMIN', 'CLIENT']}>
               <Apelaciones />
+            </ProtectedRoute>
+          } 
+        />
+        
+        {/* Dashboard de Policía */}
+        <Route 
+          path="policia" 
+          element={
+            <ProtectedRoute allowedRoles={['POLICE']}>
+              <PoliceDashboard />
+            </ProtectedRoute>
+          } 
+        />
+        
+        {/* Formulario de Emitir Multa */}
+        <Route 
+          path="policia/emitir" 
+          element={
+            <ProtectedRoute allowedRoles={['POLICE']}>
+              <EmitirMulta />
             </ProtectedRoute>
           } 
         />
